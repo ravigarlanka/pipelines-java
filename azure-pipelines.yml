@@ -10,7 +10,17 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'Java Validation'
+    organization: 'ravigarlanka'
+    scannerMode: 'Other'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner,
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.projectKey=ravigarlanka_Java-Project
+      sonar.projectName=Java Project
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -21,13 +31,6 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'Java Validation'
-    organization: 'ravigarlanka'
-    scannerMode: 'MSBuild'
-    projectKey: 'ravigarlanka'
 - task: SonarCloudAnalyze@1
 - task: SonarCloudPublish@1
   inputs:
